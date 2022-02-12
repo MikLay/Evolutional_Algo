@@ -18,7 +18,7 @@ def draw_health_distribution(sequences, health_fun):
                          line=dict(width=2, color="blue"))],
         # Setting the layout of the graph
         layout=go.Layout(
-            xaxis=dict(range=[min(health_values), max(health_values)], autorange=False),
+            xaxis=dict(range=[0, max(health_values)], autorange=False),
             yaxis=dict(range=[data['Frequency'].min(), data['Frequency'].max()], autorange=False),
             title="Binomial Curve",
             updatemenus=[dict(
