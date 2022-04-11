@@ -12,14 +12,17 @@ class EvolutionStatistic:
         self._current_population = start_population_with_health
         self._current_iter = 0
         # self._selection_intensity_arr = []
-        self.repr_speed = []
+        self._repr_speed = []
+        self._selection_diffs = []
         self._health_and_percent_of_the_best_arr = [self.num_of_the_best(start_population_with_health)]
         self._avarage_health_arr = [self.avg_health_in_population(start_population_with_health)]
         self._sigma_arr = [self.calc_sigma(start_population_with_health)]
 
     def update(self, population_with_health, current_iter_num):
-        self.repr_speed.append((self.calc_rr(self._current_population, population_with_health), self._current_iter))
-        self._current_population = population_with_health
+        selected_items = self.selected_items(self._current_population, population_with_health)
+        self._repr_speed.append((self.calc_rr(self._current_population, selected_items), self._current_iter))
+        self._selection_diffs.append((self.calc_selection_diff(self._current_population, selected_items), self._current_iter))
+        self._current_population = population_with_health.copy()
         self._current_iter = current_iter_num
         self._curr_avg_health = self.avg_health_in_population(population_with_health)
         self._health_and_percent_of_the_best_arr.append(self.num_of_the_best(population_with_health))
@@ -28,14 +31,19 @@ class EvolutionStatistic:
         # self._selection_intensity_arr.append((self.calc_selection_intensity(), self._current_iter))
         # growth rate
 
-    def calc_rr(self, old_population_with_health, new_population_with_health):
-        old_p = [i[0] for i in old_population_with_health]
+    def selected_items(self, old_population_with_health, new_population_with_health):
+        res = []
         new_p = [i[0] for i in new_population_with_health]
-        num = 0
-        for i in old_p:
-            if i in new_p:
-                num += 1
-        return num / len(old_p)
+        for old_item in old_population_with_health:
+            if old_item[0] in new_p:
+                res.append(old_item)
+        return res
+
+    def calc_rr(self, old_population_with_health, selected_items_with_health):
+        return len(selected_items_with_health) / len(old_population_with_health)
+
+    def calc_selection_diff(self, old_population_with_health, selected_items):
+        return self.avg_health_in_population(selected_items) - self.avg_health_in_population(old_population_with_health)
 
     def num_of_the_best(self, population_with_health):
         the_best = sorted(population_with_health, key=lambda i: i[1])[-1]
@@ -121,7 +129,29 @@ class EvolutionStatistic:
         current_population_statistics["NI_GR_late"] = more_than_50_percent[1][1]
 
         # diversity
+        min_rr = sorted(self._repr_speed, key=lambda i: i[0])[0]
+        max_rr = sorted(self._repr_speed, key=lambda i: i[0], reverse=True)[0]
+        current_population_statistics["RR_min"] = min_rr[0]
+        # todo can be on several iterations
+        current_population_statistics["NI_RR_min"] = min_rr[1]
+        current_population_statistics["RR_max"] = max_rr[0]
+        current_population_statistics["NI_RR_max"] = max_rr[1]
+        current_population_statistics["RR_avg"] = statistics.mean([i[0] for i in self._repr_speed])
 
+        current_population_statistics["Teta_min"] = 1 - max_rr[0]
+        current_population_statistics["NI_Teta_min"] = max_rr[1]
+        current_population_statistics["NI_Teta_max "] = 1 - min_rr[0]
+        current_population_statistics["NI_RR_max "] = min_rr[1]
+        current_population_statistics["Teta_avg"] = statistics.mean([(1 - i[0]) for i in self._repr_speed])
+
+        # selection difference
+        min_diff = sorted(self._selection_diffs, key=lambda i: i[0])[0]
+        max_diff = sorted(self._selection_diffs, key=lambda i: i[0], reverse=True)[0]
+        current_population_statistics["s_min"] = min_diff[0]
+        current_population_statistics["NI_s_min"] = min_diff[1]
+        current_population_statistics["s_max"] = max_diff[0]
+        current_population_statistics["NI_s_max"] = max_diff[1]
+        current_population_statistics["s_avg"] = statistics.mean([i[0] for i in self._selection_diffs])
 
         return current_population_statistics
 
