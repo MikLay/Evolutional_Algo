@@ -1,20 +1,26 @@
-import statistics
+from draw_diagrams import draw_histogram
+from evolution_statistics import EvolutionStatistic
+from selection_methods import Selection
 
 
 class Evolution:
     current_iter_num = 0
 
-    def __init__(self, start_population, health_function, selection_method, additional_params, max_iter_num=10000000):
-        self.selection_method = selection_method
+    def __init__(self, start_population, health_function, selection_class: Selection,
+                 max_iter_num=10000000, draw_histogram=False):
+        self.selection_method = selection_class
         self.health_function = health_function
         self.max_iter_num = max_iter_num
-        self.population = start_population
-        self.additional_params = additional_params
+        self.start_population_with_health = [(i, self.health_function(i)) for i in start_population]
+        self.population_with_health = [(i, self.health_function(i)) for i in start_population]
+        self.statistics_class = EvolutionStatistic(self.population_with_health.copy())
+        self.draw_histogram = draw_histogram
+        self.n = len(self.population_with_health)
 
     def all_sequences_are_equal(self):
-        base_sequence = self.population[0]
-        for seq in self.population:
-            if seq != base_sequence:
+        base_sequence = self.population_with_health[0]
+        for seq in self.population_with_health:
+            if seq[0] != base_sequence[0]:
                 return False
         return True
 
@@ -22,10 +28,20 @@ class Evolution:
         return self.current_iter_num >= self.max_iter_num or self.all_sequences_are_equal()
 
     def run_evolution(self):
+
         while not self.should_stop_evolution():
-            print(f"iter {self.current_iter_num}")
-            print(statistics.mean([self.health_function(i) for i in self.population]))
-            self.population = self.selection_method(self.population, self.health_function, **self.additional_params)
+            # diagram
+            if self.draw_histogram:
+                draw_histogram(self.population_with_health)
+
+            # calculation
+            self.population_with_health = self.selection_method.generate_new_population(self.population_with_health)
             self.current_iter_num += 1
 
-        return self.population
+            self.statistics_class.update(self.population_with_health, self.current_iter_num)
+
+        if self.draw_histogram:
+            draw_histogram(self.population_with_health)
+
+        stat = self.statistics_class.calc_stat()
+        return self.population_with_health, stat

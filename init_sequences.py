@@ -36,9 +36,11 @@ class BinomialPopulationGenerator(PopulationGenerator):
                 seq += '1'
         return seq
 
-    def generate_population(self, population_size):
-        res = [self.generate_optimal_sequence()]
-        for _ in range(population_size-1):
+    def generate_population(self, population_size, add_perfect=True):
+        res = []
+        if add_perfect:
+            res.append(self.generate_optimal_sequence())
+        while len(res) != population_size:
             # should I check if seq != optimal_sequence?
             res.append(self.generate_default_sequence())
         return res
