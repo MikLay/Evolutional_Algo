@@ -45,7 +45,7 @@ def main():
         selection_class = TournamentWithReturnSelection(p=0.6)
         new_population, statistic = Evolution(sequences, fh, selection_class,
                                          draw_histogram=False).run_evolution()
-        report_creator.save_statistics("tournament_with_return_p_0_6", statistic)
+        report_creator.save_statistics("tournament_with_return_p_0_6", statistic.copy())
 
         print("\n")
 
@@ -53,38 +53,38 @@ def main():
         selection_class = TournamentWithReturnSelection(p=0.8)
         new_population, statistic = Evolution(sequences, fh, selection_class,
                                          ).run_evolution()
-        report_creator.save_statistics("tournament_with_return_p_0_8", statistic)
+        report_creator.save_statistics("tournament_with_return_p_0_8", statistic.copy())
         print("\n")
 
         print("Tournament Without Return p=0.6")
         selection_class = TournamentWithoutReturnSelection(p=0.6)
         new_population, statistic = Evolution(sequences, fh, selection_class,
                                          ).run_evolution()
-        report_creator.save_statistics("tournament_without_return_p_0_6", statistic)
+        report_creator.save_statistics("tournament_without_return_p_0_6", statistic.copy())
         print("\n")
 
         print("Tournament Without Return p=0.8")
         selection_class = TournamentWithoutReturnSelection(p=0.8)
         new_population, statistic = Evolution(sequences, fh, selection_class,
                                          ).run_evolution()
-        report_creator.save_statistics("tournament_without_return_p_0_8", statistic)
+        report_creator.save_statistics("tournament_without_return_p_0_8", statistic.copy())
         print("\n")
 
         print("LinearRankingSelection b=1.6")
         selection_class = LinearRankingSelection(b=1.6)
         new_population, statistic = Evolution(sequences, fh, selection_class,
                                          ).run_evolution()
-        report_creator.save_statistics("linear_ranking_selection_b_1_6", statistic)
+        report_creator.save_statistics("linear_ranking_selection_b_1_6", statistic.copy())
         print("\n")
 
         print("LinearRankingSelection b=1.2")
         selection_class = LinearRankingSelection(b=1.2)
         new_population, statistic = Evolution(sequences, fh, selection_class,
                                          draw_histogram=False).run_evolution()
-        report_creator.save_statistics("linear_ranking_selection_b_1_2", statistic)
+        report_creator.save_statistics("linear_ranking_selection_b_1_2", statistic.copy())
         print("\n")
 
-        report_creator.create_csv()
+    report_creator.create_csv()
 
 
 if __name__ == '__main__':

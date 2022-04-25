@@ -126,7 +126,7 @@ class EvolutionStatistic:
         current_population_statistics["GR_avg"] = statistics.mean([i[0] for i in growth_rate])
         more_than_50_percent = list(filter(lambda x: x[2] >= 0.5, growth_rate))
         current_population_statistics["GR_late"] = more_than_50_percent[0][0]
-        current_population_statistics["NI_GR_late"] = more_than_50_percent[1][1]
+        current_population_statistics["NI_GR_late"] = more_than_50_percent[0][1]
 
         # diversity
         min_rr = sorted(self._repr_speed, key=lambda i: i[0])[0]
@@ -140,8 +140,8 @@ class EvolutionStatistic:
 
         current_population_statistics["Teta_min"] = 1 - max_rr[0]
         current_population_statistics["NI_Teta_min"] = max_rr[1]
-        current_population_statistics["NI_Teta_max "] = 1 - min_rr[0]
-        current_population_statistics["NI_RR_max "] = min_rr[1]
+        current_population_statistics["Teta_max"] = 1 - min_rr[0]
+        current_population_statistics["NI_Teta_max"] = min_rr[1]
         current_population_statistics["Teta_avg"] = statistics.mean([(1 - i[0]) for i in self._repr_speed])
 
         # selection difference
@@ -152,6 +152,10 @@ class EvolutionStatistic:
         current_population_statistics["s_max"] = max_diff[0]
         current_population_statistics["NI_s_max"] = max_diff[1]
         current_population_statistics["s_avg"] = statistics.mean([i[0] for i in self._selection_diffs])
+
+        # total res
+        current_population_statistics["Suc"] = (self.avg_health_in_population(self._current_population) == 100)
+
 
         return current_population_statistics
 
