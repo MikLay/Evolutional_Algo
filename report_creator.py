@@ -33,28 +33,6 @@ class ReportCreator:
                                       "NI_RR_max", "RR_avg", "Teta_min", "NI_Teta_min", "Teta_max", "NI_Teta_max",
                                       "Teta_avg", "s_min", "NI_s_min", "s_max", "NI_s_max", "s_avg"]
 
-            # create rounds header
-            for i in range(num_of_rounds):
-                round_num.append(f"Прогін {i + 1}")
-                for col in first_table_column_set:
-                    headers.append(col)
-                    round_num.append(" ")
-                headers.append("     ")
-
-            writer.writerow(round_num)
-            writer.writerow(headers)
-
-            for key, value in self.all_population_statistics.items():
-                row = [key]
-                for i in range(num_of_rounds):
-                    round_data = value[i]
-                    for col in first_table_column_set:
-                        row.append(round_data.get(col, ""))
-                    row.append(" ")
-                writer.writerow(row)
-
-            writer.writerow([""])
-
             # total result table
             second_table_column_set = ["Suc", "Min", "Max", "Avg", "Min_I_min", "NI_I_min", "Max_I_max", "NI_I_max",
                                        "Sigma_NI", "Avg_I_min", "Avg_I_max", "Avg_I_avg", "Sigma_I_max", "Sigma_I_min",
@@ -68,13 +46,35 @@ class ReportCreator:
                                        "Min_s_min", "NI_s_min", "Max_s_max", "NI_s_max", "Avg_s_min", "Avg_s_max",
                                        "Avg_s_avg"
                                        ]
-            writer.writerow([""]+second_table_column_set)
 
-            for key, value in self.calc_total_stat().items():
+            total_stat = self.calc_total_stat()
+            # create rounds header
+            for i in range(num_of_rounds):
+                round_num.append(f"Прогін {i + 1}")
+                for col in first_table_column_set:
+                    headers.append(col)
+                    round_num.append(" ")
+                headers.append("     ")
+            round_num.append("TOTAL")
+            headers += second_table_column_set
+
+            writer.writerow(round_num)
+            writer.writerow(headers)
+
+            for key, value in self.all_population_statistics.items():
                 row = [key]
+                for i in range(num_of_rounds):
+                    round_data = value[i]
+                    for col in first_table_column_set:
+                        row.append(round_data.get(col, ""))
+                    row.append(" ")
+
+                total_item_val = total_stat[key]
                 for col in second_table_column_set:
-                    row.append(value.get(col, ""))
+                    row.append(total_item_val.get(col, ""))
                 writer.writerow(row)
+
+
 
     def calc_total_stat(self):
         res = {}
