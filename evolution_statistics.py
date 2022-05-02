@@ -1,11 +1,11 @@
-import csv
 import statistics
 
 import numpy
 
 
 class EvolutionStatistic:
-    def __init__(self, start_population_with_health):
+    def __init__(self, start_population_with_health, perfect_item_health):
+        self._perfect_item_health = perfect_item_health
         self._start_population = start_population_with_health
         self._n = len(start_population_with_health)
 
@@ -154,7 +154,7 @@ class EvolutionStatistic:
         current_population_statistics["s_avg"] = statistics.mean([i[0] for i in self._selection_diffs])
 
         # total res
-        current_population_statistics["Suc"] = (self.avg_health_in_population(self._current_population) == 100)
+        current_population_statistics["Suc"] = (self.avg_health_in_population(self._current_population) == self._perfect_item_health)
 
 
         return current_population_statistics

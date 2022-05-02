@@ -3,14 +3,10 @@ def fh(seq):
     FH(X)=l-H(X,X_opt), де H(X,X_opt) – відстань Геммінга до оптимального ланцюжка Xopt=«0...0»
     (фактично кількість «0» в ланцюжку);
     """
-    res = 0
-    for i in seq:
-        if i == '0':
-            res += 1
-    return res
+    return len(list(filter(lambda i: i == '0', seq)))
 
 
-def fhd(seq):
+def fhd(seq, q=10):
     """
     FHD(X)=(l-k)+k*δ – відстань до оптимального ланцюжка Xopt=«0...0» з врахуванням селективної переваги
     на біт (параметр δ), де k – кількість «0» в ланцюжку; очевидно, FHD(«0...0»)=l*δ.
@@ -18,4 +14,18 @@ def fhd(seq):
 
     # todo ask if k is number of 0 or 1
     """
-    pass
+    l = len(seq)
+    k = len(list(filter(lambda i: i == '0', seq)))
+    return (l-k) + k * q
+
+
+def fhd_10(seq):
+    return fhd(seq)
+
+
+def fhd_50(seq):
+    return fhd(seq, 50)
+
+
+def fhd_150(seq):
+    return fhd(seq, 150)
