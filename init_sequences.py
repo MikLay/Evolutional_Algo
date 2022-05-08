@@ -2,12 +2,16 @@ import random
 
 
 class PopulationGenerator:
-    def __init__(self, sequences_len):
+    def __init__(self, sequences_len, perfect_item=None):
         self.sequences_len = sequences_len
+        self.perfect_item = perfect_item or self.generate_optimal_sequence()
 
     def generate_population(self, population_size: int):
         """Generate population"""
         raise NotImplementedError
+
+    def generate_optimal_sequence(self):
+        return NotImplementedError
 
 
 class FConstPopulationGenerator(PopulationGenerator):
@@ -38,9 +42,8 @@ class BinomialPopulationGenerator(PopulationGenerator):
     def generate_population(self, population_size, add_perfect=True):
         res = []
         if add_perfect:
-            res.append(self.generate_optimal_sequence())
+            res.append(self.perfect_item)
         while len(res) != population_size:
             # should I check if seq != optimal_sequence?
             res.append(self.generate_default_sequence())
         return res
-

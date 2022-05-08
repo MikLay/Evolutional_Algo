@@ -1,3 +1,8 @@
+from math import exp
+
+from helpers import grey_to_dec
+
+
 def fconst(seq):
     """
     Fconst(X) визначена на ланцюжках виду «00…0» та «11…1», причому Fconst(«00…0»)=Fconst(«11…1»)=l=100;
@@ -39,3 +44,64 @@ def fhd_50(seq):
 
 def fhd_150(seq):
     return fhd(seq, 150)
+
+
+def grey_x_2(seq):
+    a = 0
+    b = 10.23
+    x = grey_to_dec(seq, a, b)
+    return x ** 2
+
+
+def grey_x(seq):
+    a = 0
+    b = 10.23
+    x = grey_to_dec(seq, a, b)
+    return x
+
+
+def grey_x_4(seq):
+    a = 0
+    b = 10.23
+    x = grey_to_dec(seq, a, b)
+    return x ** 4
+
+
+def grey_2_x_2(seq):
+    a = 0
+    b = 10.23
+    x = grey_to_dec(seq, a, b)
+    return 2 * x ** 2
+
+
+def grey_512_x_2(seq):
+    a = -5.11
+    b = 5.12
+    x = grey_to_dec(seq, a, b)
+    return (5.12 ** 2) - (x ** 2)
+
+
+def grey_512_x_4(seq):
+    a = -5.11
+    b = 5.12
+    x = grey_to_dec(seq, a, b)
+    return (5.12 ** 4) - (x ** 4)
+
+
+def grey_e_x_c(seq, c):
+    a = 0
+    b = 10.23
+    x = grey_to_dec(seq, a, b)
+    return exp(c * x)
+
+
+def grey_e_x_025(seq):
+    return grey_e_x_c(seq, 0.25)
+
+
+def grey_e_x_1(seq):
+    return grey_e_x_c(seq, 1)
+
+
+def grey_e_x_2(seq):
+    return grey_e_x_c(seq, 2)
