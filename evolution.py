@@ -6,15 +6,14 @@ from selection_methods import Selection
 class Evolution:
     current_iter_num = 0
 
-    def __init__(self, start_population, health_function, perfect_item, selection_class: Selection,
+    def __init__(self, start_population, health_function, check_perfect_func, selection_class: Selection, calc_noise,
                  max_iter_num=10000000, draw_histogram=False):
         self.selection_method = selection_class
         self.health_function = health_function
-        self.perfect_item = perfect_item
         self.max_iter_num = max_iter_num
         self.start_population_with_health = [(i, self.health_function(i)) for i in start_population]
         self.population_with_health = [(i, self.health_function(i)) for i in start_population]
-        self.statistics_class = EvolutionStatistic(self.population_with_health.copy(), self.health_function(self.perfect_item))
+        self.statistics_class = EvolutionStatistic(self.population_with_health.copy(), check_perfect_func, calc_noise)
         self.draw_histogram = draw_histogram
         self.n = len(self.population_with_health)
 

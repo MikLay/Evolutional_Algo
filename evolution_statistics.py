@@ -4,8 +4,9 @@ import numpy
 
 
 class EvolutionStatistic:
-    def __init__(self, start_population_with_health, perfect_item_health):
-        self._perfect_item_health = perfect_item_health
+    def __init__(self, start_population_with_health, check_perfect_func, calc_noise):
+        self.is_sequence_perfect = check_perfect_func
+        self.calc_noise = calc_noise
         self._start_population = start_population_with_health
         self._n = len(start_population_with_health)
 
@@ -76,6 +77,13 @@ class EvolutionStatistic:
         # todo set - if didn't reach homogeneity
         return self._current_iter
 
+    def all_are_the_same(self):
+        item = self._current_population[0][0]
+        for i in self._current_population:
+            if i[0] != item:
+                return False
+        return True
+
     def calc_selection_intensity_arr(self):
         def calc_selection_intensity(fs, f, sigma):
             return (fs - f) / sigma
@@ -99,10 +107,22 @@ class EvolutionStatistic:
             growth_rate.append((calc_growth_rate(i), i, self._health_and_percent_of_the_best_arr[i][1]))
         return growth_rate
 
-    def calc_stat(self):
-        """
-        calc parameters based on population data
-        """
+    def is_successful(self):
+        return self.all_are_the_same() and self.is_sequence_perfect(self._current_population[0][0])
+
+    def calc_conv_to(self):
+        if self.all_are_the_same():
+            return self._current_population[0][0][0]
+        return None
+
+    def calc_noise_stat(self):
+        return {
+            "NI": self.calc_NI(),
+            "ConvTo": self.calc_conv_to(),
+            "Suc": self.is_successful()
+            }
+
+    def calc_default_stat(self):
         current_population_statistics = {}
 
         # base data
@@ -154,10 +174,19 @@ class EvolutionStatistic:
         current_population_statistics["s_avg"] = statistics.mean([i[0] for i in self._selection_diffs])
 
         # total res
-        current_population_statistics["Suc"] = (self.avg_health_in_population(self._current_population) == self._perfect_item_health)
-
+        # current_population_statistics["Suc"] = (self.avg_health_in_population(self._current_population) ==
+        # self._perfect_item_health)
+        current_population_statistics["Suc"] = self.is_successful()
 
         return current_population_statistics
+
+    def calc_stat(self):
+        """
+        calc parameters based on population data
+        """
+        if self.calc_noise:
+            return self.calc_noise_stat()
+        return self.calc_default_stat()
 
 
 

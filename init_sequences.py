@@ -11,7 +11,6 @@ class PopulationGenerator:
 
 
 class FConstPopulationGenerator(PopulationGenerator):
-
     def generate_population(self, population_size: int):
         res = []
         for i in range(population_size // 2):
