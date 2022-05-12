@@ -1,3 +1,4 @@
+import copy
 import statistics
 
 import numpy
@@ -12,12 +13,14 @@ class EvolutionStatistic:
 
         self._current_population = start_population_with_health
         self._current_iter = 0
+        self._curr_avg_health = None
         # self._selection_intensity_arr = []
         self._repr_speed = []
         self._selection_diffs = []
         self._health_and_percent_of_the_best_arr = [self.num_of_the_best(start_population_with_health)]
         self._avarage_health_arr = [self.avg_health_in_population(start_population_with_health)]
         self._sigma_arr = [self.calc_sigma(start_population_with_health)]
+        self._diagram_avg_health = []
 
     def update(self, population_with_health, current_iter_num):
         selected_items = self.selected_items(self._current_population, population_with_health)
@@ -177,6 +180,17 @@ class EvolutionStatistic:
         # current_population_statistics["Suc"] = (self.avg_health_in_population(self._current_population) ==
         # self._perfect_item_health)
         current_population_statistics["Suc"] = self.is_successful()
+
+        # diagrams
+        current_population_statistics["show_diagrams"] = True
+        current_population_statistics["diagram_avg_health"] = copy.deepcopy(self._avarage_health_arr)
+        current_population_statistics["diagram_intensity"] = [i[0] for i in selection_intensity]
+        current_population_statistics["diagram_diff"] = [i[0] for i in self._selection_diffs]
+        current_population_statistics["diagram_sigma"] = copy.deepcopy(self._sigma_arr)
+        current_population_statistics["diagram_best_percent"] = [i[1] for i in self._health_and_percent_of_the_best_arr]
+        current_population_statistics["diagram_grow_speed"] = [i[0] for i in growth_rate]
+        current_population_statistics["diagram_repr_speed"] = [i[0] for i in self._repr_speed]
+        current_population_statistics["diagram_teta_speed"] = [(1 - i[0]) for i in self._repr_speed]
 
         return current_population_statistics
 

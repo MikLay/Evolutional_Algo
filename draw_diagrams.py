@@ -23,3 +23,24 @@ def draw_histogram(population, title):
 
     # function to show the plot
     plt.show()
+
+
+def draw_round_res(title, data_1, line_legend, data_2=None, line_legend_2=""):
+    x = [i for i in range(len(data_1))]
+    plt.plot(x, data_1, label=line_legend)
+
+    if data_2:
+        plt.plot(x, data_2, label=line_legend_2)
+
+    plt.xlabel('population num')
+    if data_2:
+        plt.ylabel(f'{line_legend}/{line_legend_2}')
+    else:
+        plt.ylabel(line_legend)
+    plt.title(title)
+
+    # show a legend on the plot
+    plt.legend()
+
+    # function to show the plot
+    plt.show()

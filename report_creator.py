@@ -2,13 +2,16 @@ import csv
 import math
 import statistics
 
+from draw_diagrams import draw_round_res
+
 
 class ReportCreator:
-    def __init__(self, file_name, title, calc_noise):
+    def __init__(self, file_name, title, calc_noise, diagrams_file_name):
         self.all_population_statistics = {}
         self.file_name = file_name
         self.title = title
         self.calc_noise = calc_noise
+        self.diagrams_file_name = diagrams_file_name
 
     def save_statistics(self, population_id, statistics_to_save):
         """
@@ -20,33 +23,52 @@ class ReportCreator:
             self.all_population_statistics[population_id] = [statistics_to_save.copy()]
 
     def draw_table(self, round_headers, total_headers):
-        with open(self.file_name, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([self.title])
+        # rounds' results
+        headers = [""]
+        round_num = [""]
+        num_of_rounds = len(list(self.all_population_statistics.values())[0])
 
-            # rounds' results
-            headers = [""]
-            round_num = [""]
-            num_of_rounds = len(list(self.all_population_statistics.values())[0])
+        total_stat = self.calc_total_stat()
+        # create rounds header
+        for i in range(num_of_rounds):
+            round_num.append(f"Прогін {i + 1}")
+            for col in round_headers:
+                headers.append(col)
+                round_num.append(" ")
+            headers.append("     ")
+        round_num.append("TOTAL")
+        headers += total_headers
 
-            total_stat = self.calc_total_stat()
-            # create rounds header
-            for i in range(num_of_rounds):
-                round_num.append(f"Прогін {i + 1}")
-                for col in round_headers:
-                    headers.append(col)
-                    round_num.append(" ")
-                headers.append("     ")
-            round_num.append("TOTAL")
-            headers += total_headers
-
-            writer.writerow(round_num)
-            writer.writerow(headers)
-
+        rows = []
+        with open(self.diagrams_file_name, 'a', newline='') as diagram_file:
+            writer = csv.writer(diagram_file)
             for key, value in self.all_population_statistics.items():
                 row = [key]
                 for i in range(num_of_rounds):
                     round_data = value[i]
+
+                    # diagram
+                    show_diagrams = round_data.get("show_diagrams", False)
+                    if show_diagrams:
+                        diagram_title = f"{self.title} \n method: {key} Прогін {i + 1}"
+                        # if i == 1:
+                        #     draw_round_res(diagram_title, round_data["diagram_avg_health"], "Avg health")
+                        #     draw_round_res(diagram_title, round_data["diagram_intensity"], "Intensity")
+                        #     draw_round_res(diagram_title, round_data["diagram_diff"], "Diff")
+                        #     draw_round_res(diagram_title, round_data["diagram_sigma"], "Sigma")
+                        #     draw_round_res(diagram_title, round_data["diagram_intensity"], "Intensity", round_data["diagram_diff"], "Diff")
+                        #     draw_round_res(diagram_title, round_data["diagram_best_percent"], "Best percent")
+                        #     draw_round_res(diagram_title, round_data["diagram_grow_speed"], "Grow speed")
+                        #     draw_round_res(diagram_title, round_data["diagram_repr_speed"], "Repr speed", round_data["diagram_teta_speed"], "Teta speed")
+
+                        writer.writerow([diagram_title, "Avg health"] + round_data["diagram_avg_health"])
+                        writer.writerow([diagram_title, "Intensity"] + round_data["diagram_intensity"])
+                        writer.writerow([diagram_title, "Diff"] + round_data["diagram_diff"])
+                        writer.writerow([diagram_title, "Sigma"] + round_data["diagram_sigma"])
+                        writer.writerow([diagram_title, "Best percent"] + round_data["diagram_best_percent"])
+                        writer.writerow([diagram_title, "Grow speed"] + round_data["diagram_grow_speed"])
+                        writer.writerow([diagram_title, "Repr speed"] + round_data["diagram_repr_speed"])
+
                     for col in round_headers:
                         row.append(round_data.get(col, ""))
                     row.append(" ")
@@ -54,6 +76,14 @@ class ReportCreator:
                 total_item_val = total_stat[key]
                 for col in total_headers:
                     row.append(total_item_val.get(col, ""))
+                rows.append(row)
+
+        with open(self.file_name, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([self.title])
+            writer.writerow(round_num)
+            writer.writerow(headers)
+            for row in rows:
                 writer.writerow(row)
             writer.writerow([""])
 

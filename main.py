@@ -46,46 +46,51 @@ def main():
         writer = csv.writer(file)
         writer.writerow([""])
 
-        # population sizes
-        population_sizes = [100, 500, 1000]
+    diagrams_file_name = "report_diagrams.csv"
+    with open(diagrams_file_name, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([""])
 
-        # health functions
-        params = [
-            {"population_generator": FConstPopulationGenerator(sequences_len=100), "health_func": fconst,
-             "perfect_item_func": f_const_perfect_sequence, "calc_noise": True},
-            {"population_generator": BinomialPopulationGenerator(sequences_len=100), "health_func": fh,
-             "perfect_item_func": fh_perfect_sequence},
-            {"population_generator": BinomialPopulationGenerator(sequences_len=100), "health_func": fhd_10,
-             "perfect_item_func": fh_perfect_sequence},
-            {"population_generator": BinomialPopulationGenerator(sequences_len=100), "health_func": fhd_50,
-             "perfect_item_func": fh_perfect_sequence},
-            {"population_generator": BinomialPopulationGenerator(sequences_len=100), "health_func": fhd_150,
-             "perfect_item_func": fh_perfect_sequence},
-            {"population_generator": BinomialPopulationGenerator(sequences_len=10,
-                                                                 perfect_item=dec_to_grey(10.23, 0, 10.23)),
-             "health_func": grey_x_2, "perfect_item_func": perfect_sequence_1023},
-            {"population_generator": BinomialPopulationGenerator(sequences_len=10,
-                                                                 perfect_item=dec_to_grey(10.23, 0, 10.23)),
-             "health_func": grey_x, "perfect_item_func": perfect_sequence_1023},
-            {"population_generator": BinomialPopulationGenerator(sequences_len=10,
-                                                                 perfect_item=dec_to_grey(10.23, 0, 10.23)),
-             "health_func": grey_x_4, "perfect_item_func": perfect_sequence_1023},
-            {"population_generator": BinomialPopulationGenerator(sequences_len=10,
-                                                                 perfect_item=dec_to_grey(0, -5.11, 5.12)),
-             "health_func": grey_512_x_2, "perfect_item_func": perfect_sequence_0},
-            {"population_generator": BinomialPopulationGenerator(sequences_len=10,
-                                                                 perfect_item=dec_to_grey(0, -5.11, 5.12)),
-             "health_func": grey_512_x_4, "perfect_item_func": perfect_sequence_0},
-            {"population_generator": BinomialPopulationGenerator(sequences_len=10,
-                                                                 perfect_item=dec_to_grey(10.23, 0, 10.23)),
-             "health_func": grey_e_x_025, "perfect_item_func": perfect_sequence_1023},
-            {"population_generator": BinomialPopulationGenerator(sequences_len=10,
-                                                                 perfect_item=dec_to_grey(10.23, 0, 10.23)),
-             "health_func": grey_e_x_1, "perfect_item_func": perfect_sequence_1023},
-            {"population_generator": BinomialPopulationGenerator(sequences_len=10,
-                                                                 perfect_item=dec_to_grey(10.23, 0, 10.23)),
-             "health_func": grey_e_x_2, "perfect_item_func": perfect_sequence_1023},
-        ]
+    # population sizes
+    population_sizes = [100]
+
+    # health functions
+    params = [
+        {"population_generator": FConstPopulationGenerator(sequences_len=100), "health_func": fconst,
+         "perfect_item_func": f_const_perfect_sequence, "calc_noise": True},
+        {"population_generator": BinomialPopulationGenerator(sequences_len=100), "health_func": fh,
+         "perfect_item_func": fh_perfect_sequence},
+        {"population_generator": BinomialPopulationGenerator(sequences_len=100), "health_func": fhd_10,
+         "perfect_item_func": fh_perfect_sequence},
+        {"population_generator": BinomialPopulationGenerator(sequences_len=100), "health_func": fhd_50,
+         "perfect_item_func": fh_perfect_sequence},
+        {"population_generator": BinomialPopulationGenerator(sequences_len=100), "health_func": fhd_150,
+         "perfect_item_func": fh_perfect_sequence},
+        {"population_generator": BinomialPopulationGenerator(sequences_len=10,
+                                                             perfect_item=dec_to_grey(10.23, 0, 10.23)),
+         "health_func": grey_x_2, "perfect_item_func": perfect_sequence_1023},
+        {"population_generator": BinomialPopulationGenerator(sequences_len=10,
+                                                             perfect_item=dec_to_grey(10.23, 0, 10.23)),
+         "health_func": grey_x, "perfect_item_func": perfect_sequence_1023},
+        {"population_generator": BinomialPopulationGenerator(sequences_len=10,
+                                                             perfect_item=dec_to_grey(10.23, 0, 10.23)),
+         "health_func": grey_x_4, "perfect_item_func": perfect_sequence_1023},
+        {"population_generator": BinomialPopulationGenerator(sequences_len=10,
+                                                             perfect_item=dec_to_grey(0, -5.11, 5.12)),
+         "health_func": grey_512_x_2, "perfect_item_func": perfect_sequence_0},
+        {"population_generator": BinomialPopulationGenerator(sequences_len=10,
+                                                             perfect_item=dec_to_grey(0, -5.11, 5.12)),
+         "health_func": grey_512_x_4, "perfect_item_func": perfect_sequence_0},
+        {"population_generator": BinomialPopulationGenerator(sequences_len=10,
+                                                             perfect_item=dec_to_grey(10.23, 0, 10.23)),
+         "health_func": grey_e_x_025, "perfect_item_func": perfect_sequence_1023},
+        {"population_generator": BinomialPopulationGenerator(sequences_len=10,
+                                                             perfect_item=dec_to_grey(10.23, 0, 10.23)),
+         "health_func": grey_e_x_1, "perfect_item_func": perfect_sequence_1023},
+        {"population_generator": BinomialPopulationGenerator(sequences_len=10,
+                                                             perfect_item=dec_to_grey(10.23, 0, 10.23)),
+         "health_func": grey_e_x_2, "perfect_item_func": perfect_sequence_1023},
+    ]
 
     for population_size in population_sizes:
         for param_set in params:
@@ -96,7 +101,7 @@ def main():
 
             report_creator = ReportCreator(file_name, f"health func: {health_func.__name__}, "
                                                       f"sequences len: {population_generator.sequences_len}, "
-                                                      f"population_size: {population_size}", calc_noise)
+                                                      f"population_size: {population_size}", calc_noise, diagrams_file_name)
 
             for i in range(10):
                 print(f"----------------------Iteration {i}----------------------")
