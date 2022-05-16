@@ -6,12 +6,15 @@ from draw_diagrams import draw_round_res
 
 
 class ReportCreator:
-    def __init__(self, file_name, title, calc_noise, diagrams_file_name):
+    def __init__(self, file_name, conf, calc_noise):
         self.all_population_statistics = {}
         self.file_name = file_name
-        self.title = title
+        self.conf = conf
+        self.health_func = self.conf["health_func"].__name__
+        self.population_size = self.conf["population_size"]
+        self.mutation = self.conf.get("mutation", 0)
         self.calc_noise = calc_noise
-        self.diagrams_file_name = diagrams_file_name
+        self.show_diagram = not calc_noise
 
     def save_statistics(self, population_id, statistics_to_save):
         """
@@ -21,6 +24,17 @@ class ReportCreator:
             self.all_population_statistics[population_id].append(statistics_to_save.copy())
         else:
             self.all_population_statistics[population_id] = [statistics_to_save.copy()]
+
+    def save_diagrams(self, conf, round_data):
+        draw_round_res(conf, round_data["diagram_avg_health"], "Середнє значення здоров’я популяції")
+        draw_round_res(conf, round_data["diagram_intensity"], "Інтенсивність відбору")
+        draw_round_res(conf, round_data["diagram_diff"], "Різниця відбору")
+        draw_round_res(conf, round_data["diagram_sigma"], "Стандартне відхилення коефіцієнта")
+        draw_round_res(conf, round_data["diagram_intensity"], "Інтенсивність відбору", round_data["diagram_diff"], "Різниця відбору")
+        draw_round_res(conf, round_data["diagram_best_percent"], "Частка копій найкращої особини")
+        draw_round_res(conf, round_data["diagram_grow_speed"], "Швидкість росту")
+        draw_round_res(conf, round_data["diagram_repr_speed"], "Швидкість репродукції", round_data["diagram_teta_speed"],
+                       "Втрата різноманітності")
 
     def draw_table(self, round_headers, total_headers):
         # rounds' results
@@ -40,47 +54,31 @@ class ReportCreator:
         headers += total_headers
 
         rows = []
-        with open(self.diagrams_file_name, 'a', newline='') as diagram_file:
-            writer = csv.writer(diagram_file)
-            for key, value in self.all_population_statistics.items():
-                row = [key]
-                for i in range(num_of_rounds):
-                    round_data = value[i]
+        for key, value in self.all_population_statistics.items():
+            row = [key]
+            for i in range(num_of_rounds):
+                round_data = value[i]
 
-                    # diagram
-                    show_diagrams = round_data.get("show_diagrams", False)
-                    if show_diagrams:
-                        diagram_title = f"{self.title} \n method: {key} Прогін {i + 1}"
-                        # if i == 1:
-                        #     draw_round_res(diagram_title, round_data["diagram_avg_health"], "Avg health")
-                        #     draw_round_res(diagram_title, round_data["diagram_intensity"], "Intensity")
-                        #     draw_round_res(diagram_title, round_data["diagram_diff"], "Diff")
-                        #     draw_round_res(diagram_title, round_data["diagram_sigma"], "Sigma")
-                        #     draw_round_res(diagram_title, round_data["diagram_intensity"], "Intensity", round_data["diagram_diff"], "Diff")
-                        #     draw_round_res(diagram_title, round_data["diagram_best_percent"], "Best percent")
-                        #     draw_round_res(diagram_title, round_data["diagram_grow_speed"], "Grow speed")
-                        #     draw_round_res(diagram_title, round_data["diagram_repr_speed"], "Repr speed", round_data["diagram_teta_speed"], "Teta speed")
+                if self.show_diagram:
+                    conf = self.conf
+                    conf["method"] = key
+                    conf["progin"] = i
+                    self.save_diagrams(conf, round_data)
 
-                        writer.writerow([diagram_title, "Avg health"] + round_data["diagram_avg_health"])
-                        writer.writerow([diagram_title, "Intensity"] + round_data["diagram_intensity"])
-                        writer.writerow([diagram_title, "Diff"] + round_data["diagram_diff"])
-                        writer.writerow([diagram_title, "Sigma"] + round_data["diagram_sigma"])
-                        writer.writerow([diagram_title, "Best percent"] + round_data["diagram_best_percent"])
-                        writer.writerow([diagram_title, "Grow speed"] + round_data["diagram_grow_speed"])
-                        writer.writerow([diagram_title, "Repr speed"] + round_data["diagram_repr_speed"])
+                for col in round_headers:
+                    row.append(round_data.get(col, ""))
+                row.append(" ")
 
-                    for col in round_headers:
-                        row.append(round_data.get(col, ""))
-                    row.append(" ")
-
-                total_item_val = total_stat[key]
-                for col in total_headers:
-                    row.append(total_item_val.get(col, ""))
-                rows.append(row)
+            total_item_val = total_stat[key]
+            for col in total_headers:
+                row.append(total_item_val.get(col, ""))
+            rows.append(row)
 
         with open(self.file_name, 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([self.title])
+
+            title = f"Функція здоров'я: {self.health_func}, Розмір популяції: {self.population_size}, Ймовірність мутації: {self.mutation}"
+            writer.writerow([title])
             writer.writerow(round_num)
             writer.writerow(headers)
             for row in rows:

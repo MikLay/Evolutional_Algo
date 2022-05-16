@@ -11,15 +11,16 @@ def choose_candidates(population, t):
 
 
 class Selection:
-    def generate_new_population(self, population_with_health):
+    def select_parents_pool(self, population_with_health):
         raise NotImplementedError
 
 
 class TournamentWithReturnSelection(Selection):
     def __init__(self, p):
+        self.name = f"tournament_with_return_p_{p}"
         self.p = p
 
-    def generate_new_population(self, population_with_health):
+    def select_parents_pool(self, population_with_health):
         """
         population_with_health [(candidate, health_fun(candidate))]
         t (number of candidates) == 2
@@ -38,9 +39,10 @@ class TournamentWithReturnSelection(Selection):
 
 class TournamentWithoutReturnSelection(Selection):
     def __init__(self, p):
+        self.name = f"tournament_without_return_p_{p}"
         self.p = p
 
-    def generate_new_population(self, population_with_health):
+    def select_parents_pool(self, population_with_health):
         """
         population_with_health [(candidate, health_fun(candidate))]
         t (number of candidates) == 2
@@ -68,6 +70,7 @@ class TournamentWithoutReturnSelection(Selection):
 
 class LinearRankingSelection(Selection):
     def __init__(self, b):
+        self.name = f"linear_ranking_selection_b_{b}"
         self.b = b
 
     def calc_ranking(self, population):
@@ -90,7 +93,7 @@ class LinearRankingSelection(Selection):
             prev_val = new_val
         return res
 
-    def generate_new_population(self, population_with_health):
+    def select_parents_pool(self, population_with_health):
         population_with_p_values = self.calc_p(population_with_health)
         n = len(population_with_health)
         step = 1 / n
