@@ -53,27 +53,6 @@ class ReportCreator:
         round_num.append("TOTAL")
         headers += total_headers
 
-        rows = []
-        for key, value in self.all_population_statistics.items():
-            row = [key]
-            for i in range(num_of_rounds):
-                round_data = value[i]
-
-                if self.show_diagram:
-                    conf = self.conf
-                    conf["method"] = key
-                    conf["progin"] = i
-                    self.save_diagrams(conf, round_data)
-
-                for col in round_headers:
-                    row.append(round_data.get(col, ""))
-                row.append(" ")
-
-            total_item_val = total_stat[key]
-            for col in total_headers:
-                row.append(total_item_val.get(col, ""))
-            rows.append(row)
-
         with open(self.file_name, 'a', newline='') as file:
             writer = csv.writer(file)
 
@@ -81,8 +60,26 @@ class ReportCreator:
             writer.writerow([title])
             writer.writerow(round_num)
             writer.writerow(headers)
-            for row in rows:
+            for key, value in self.all_population_statistics.items():
+                row = [key]
+                for i in range(num_of_rounds):
+                    round_data = value[i]
+
+                    if self.show_diagram:
+                        conf = self.conf
+                        conf["method"] = key
+                        conf["progin"] = i
+                        self.save_diagrams(conf, round_data)
+
+                    for col in round_headers:
+                        row.append(round_data.get(col, ""))
+                    row.append(" ")
+
+                total_item_val = total_stat[key]
+                for col in total_headers:
+                    row.append(total_item_val.get(col, ""))
                 writer.writerow(row)
+
             writer.writerow([""])
 
     def create_csv(self):

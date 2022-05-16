@@ -6,7 +6,7 @@ class PopulationGenerator:
         self.sequences_len = sequences_len
         self.perfect_item = perfect_item or self.generate_optimal_sequence()
 
-    def generate_population(self, population_size: int):
+    def generate_population(self, population_size: int, add_perfect=False):
         """Generate population"""
         raise NotImplementedError
 
@@ -15,7 +15,7 @@ class PopulationGenerator:
 
 
 class FConstPopulationGenerator(PopulationGenerator):
-    def generate_population(self, population_size: int):
+    def generate_population(self, population_size: int, add_perfect=False):
         res = []
         for i in range(population_size // 2):
             res.append('0' * self.sequences_len)

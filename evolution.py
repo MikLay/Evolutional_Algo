@@ -10,7 +10,7 @@ class Evolution:
     current_iter_num = 0
 
     def __init__(self, start_population, health_function, check_perfect_func, selection_class: Selection, calc_noise, progin,
-                 mutation_p=0, max_iter_num=10000000, accuracy=0.0001, should_draw_histogram=False):
+                 mutation_p=0, max_iter_num=10000000, accuracy=0.01, should_draw_histogram=False):
         self.selection_method = selection_class
         self.health_function = health_function
         self.max_iter_num = max_iter_num
@@ -40,8 +40,8 @@ class Evolution:
         iter_health = self.average_health[-10:]
         min_health = min(iter_health)
         max_health = max(iter_health)
-        print(f"{self.current_iter_num}: {max_health - min_health}")
-        print(iter_health)
+        # print(f"{self.current_iter_num}: {max_health - min_health}")
+        # print(iter_health)
         return (max_health - min_health) <= self.accuracy
 
     def should_stop_evolution(self):

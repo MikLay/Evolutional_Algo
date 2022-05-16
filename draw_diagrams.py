@@ -55,7 +55,7 @@ def draw_round_res(params, data_1, line_legend, data_2=None, line_legend_2=""):
     selection_method = params["method"]
     progin = params["progin"] + 1
 
-    title = f"Ф. здоров'я: {health_func}, Популяції: {population_size}, \n Відбір: {selection_method}, Прогін {progin}, P_мутації: {mutation}"
+    title = f"Ф. здоров'я: {health_func},  Відбір: {selection_method}, \n Популяція: {population_size}, Прогін {progin}, P_мутації: {mutation}"
 
     x = [i for i in range(len(data_1))]
     plt.figure()
