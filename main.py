@@ -1,5 +1,3 @@
-import csv
-import multiprocessing
 import statistics
 
 from evolution import Evolution
@@ -46,10 +44,7 @@ def run_all_method_on_param_set(param_set):
     population_size = param_set["population_size"]
     file_name = param_set["file_name"]
 
-    conf = param_set
-    conf["population_size"] = population_size
-
-    report_creator = ReportCreator(file_name, conf, calc_noise)
+    report_creator = ReportCreator(file_name, param_set, calc_noise)
     print(f"{population_size}, {param_set}")
     for i in range(10):
         print(f"----------------------Iteration {i}----------------------")
@@ -62,7 +57,7 @@ def run_all_method_on_param_set(param_set):
         sequences_with_health = [(i, health_func(i)) for i in sequences]
 
         if i == 0:
-            print_sequence_data(sequences_with_health, conf)
+            print_sequence_data(sequences_with_health, param_set)
 
         print("\n")
 
@@ -158,15 +153,11 @@ def no_mutation_tests(file_name):
          "health_func": grey_e_x_2, "perfect_item_func": perfect_sequence_1023},
     ]
 
-    configs = []
     for population_size in population_sizes:
         for param_set in params:
             param_set["population_size"] = population_size
             param_set["file_name"] = file_name
-            configs.append(param_set)
-
-    with multiprocessing.Pool(8) as p:
-        p.map(run_all_method_on_param_set, configs)
+            run_all_method_on_param_set(param_set)
 
 
 def ranking_mutation_tests(file_name):
@@ -190,11 +181,11 @@ def ranking_mutation_tests(file_name):
         {"population_generator": BinomialPopulationGenerator(sequences_len=10,
                                                              perfect_item=dec_to_grey(10.23, 0, 10.23)),
          "health_func": grey_x_2, "perfect_item_func": perfect_sequence_1023, "population_size": 1000,
-         "mutation": 0.000148257805588131 * 0.9},
+         "mutation": 0.000148257805588131 * 0.9 * 0.9},
         {"population_generator": BinomialPopulationGenerator(sequences_len=10,
                                                              perfect_item=dec_to_grey(0, -5.11, 5.12)),
          "health_func": grey_512_x_2, "perfect_item_func": perfect_sequence_0, "population_size": 1000,
-         "mutation": 0.000148257805588131 * 0.9},
+         "mutation": 0.000148257805588131 * 0.9 * 0.9},
     ]
 
     for conf in ranking_configurations:
@@ -206,7 +197,7 @@ def ranking_mutation_tests(file_name):
         mutation = conf.get("mutation", False)
 
         report_creator = ReportCreator(file_name, conf, calc_noise)
-        print(ranking_configurations)
+        print(conf)
         for i in range(10):
             print(f"----------------------Iteration {i}----------------------")
             sequences = population_generator.generate_population(population_size=population_size)
@@ -254,11 +245,11 @@ def tournament_mutation_tests(file_name):
         {"population_generator": BinomialPopulationGenerator(sequences_len=10,
                                                              perfect_item=dec_to_grey(10.23, 0, 10.23)),
          "health_func": grey_x_2, "perfect_item_func": perfect_sequence_1023, "population_size": 1000,
-         "mutation": 0.000148255878401541},
+         "mutation": 0.000148255878401541 * 0.9 },
         {"population_generator": BinomialPopulationGenerator(sequences_len=10,
                                                              perfect_item=dec_to_grey(0, -5.11, 5.12)),
          "health_func": grey_512_x_2, "perfect_item_func": perfect_sequence_0, "population_size": 1000,
-         "mutation": 0.000148255878401541},
+         "mutation": 0.000148255878401541 * 0.9},
     ]
 
     for conf in ranking_configurations:
@@ -270,7 +261,7 @@ def tournament_mutation_tests(file_name):
         mutation = conf.get("mutation", False)
 
         report_creator = ReportCreator(file_name, conf, calc_noise)
-        print(ranking_configurations)
+        print(conf)
         for i in range(10):
             print(f"----------------------Iteration {i}----------------------")
             sequences = population_generator.generate_population(population_size=population_size)
@@ -309,15 +300,11 @@ def tournament_mutation_tests(file_name):
 
 
 def main():
-    # clean file
     file_name = "final_report_mutation.csv"
-    # with open(file_name, 'w', newline='') as file:
-    #     writer = csv.writer(file)
-    #     writer.writerow([""])
-
-    # no_mutation_tests(file_name)
+    no_mutation_tests(file_name)
     ranking_mutation_tests(file_name)
-    # tournament_mutation_tests(file_name)
+    tournament_mutation_tests(file_name)
+
 
 if __name__ == '__main__':
     main()
