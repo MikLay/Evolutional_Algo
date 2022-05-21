@@ -57,7 +57,7 @@ class ReportCreator:
         with open(self.file_name, 'a', newline='') as file:
             writer = csv.writer(file)
 
-            title = f"Функція здоров'я: {self.health_func}, Розмір популяції: {self.population_size}, Ймовірність мутації: {self.mutation}"
+            title = f"Функція здоров'я: {self.health_func}, n: {self.population_size}, P мутації: {self.mutation}"
             writer.writerow([title])
             writer.writerow(round_num)
             writer.writerow(headers)

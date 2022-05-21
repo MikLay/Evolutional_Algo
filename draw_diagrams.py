@@ -21,7 +21,15 @@ def get_dir_name(conf, directory_name):
     return dir_name
 
 
-def default_genotype_phenotype_diagrams(population, conf, directory_name):
+def default_genotype_phenotype_diagrams_q_10(population, conf, directory_name):
+    default_genotype_phenotype_diagrams(population, conf, directory_name, 10)
+
+
+def default_genotype_phenotype_diagrams_q_150(population, conf, directory_name):
+    default_genotype_phenotype_diagrams(population, conf, directory_name, 150)
+
+
+def default_genotype_phenotype_diagrams(population, conf, directory_name, q=1):
     health_func = conf["health_func"].__name__
     population_size = conf["population_size"]
     iter_num = conf.get("iter", 0)
@@ -30,17 +38,16 @@ def default_genotype_phenotype_diagrams(population, conf, directory_name):
 
     # mut_status = "with_mutation" if mutation > 0 else "without_mutation"
     dir_name = get_dir_name(conf, directory_name)
+    optimal_health = len(population[0][0]) * q
 
-    optimal_health = len(population)
     health = [i[1] for i in population]
     distance_to_optimal = [(optimal_health - i[1]) for i in population]
 
     # phenotype
-    range = (0, optimal_health)
     bins = 100
 
     plt.figure()
-    plt.hist(health, bins, range, color='green',
+    plt.hist(health, bins, color='green',
              histtype='bar', rwidth=1)
 
     # x-axis label
@@ -49,7 +56,7 @@ def default_genotype_phenotype_diagrams(population, conf, directory_name):
     plt.ylabel('Num of individual')
     # plot title
 
-    title = f"Розподіл здоров'я. Ф. здоров'я {health_func}, розмір популяції {population_size}, \n Ітерація {iter_num}. {final_text}"
+    title = f"Розподіл здоров'я. Ф. здоров'я {health_func}, \n n = {population_size}, Ітерація {iter_num}. {final_text}"
     plt.title(title)
 
     plt.savefig(f"{dir_name}/Розподіл здоров'я, Ітерація {iter_num}, {final_text}.png")
@@ -57,7 +64,7 @@ def default_genotype_phenotype_diagrams(population, conf, directory_name):
 
     # genotype
     plt.figure()
-    plt.hist(distance_to_optimal, bins, range, color='red',
+    plt.hist(distance_to_optimal, bins, color='red',
              histtype='bar', rwidth=1)
 
     # x-axis label
@@ -66,7 +73,7 @@ def default_genotype_phenotype_diagrams(population, conf, directory_name):
     plt.ylabel('Num of individual')
     # plot title
 
-    title = f"Розподіл відстані до ідеальної. Ф. здоров'я {health_func}, розмір популяції {population_size}, \n Ітерація {iter_num}. {final_text}"
+    title = f"Розподіл відстані до ідеальної. Ф. здоров'я {health_func}, \n n = {population_size}, Ітерація {iter_num}. {final_text}"
     plt.title(title)
 
     plt.savefig(f"{dir_name}/Розподіл відстані до ідеальної, Ітерація {iter_num}, {final_text}.png")
@@ -105,7 +112,7 @@ def grey_genotype_phenotype_diagrams(population, conf, a, b, optimal_x, director
     plt.ylabel('Num of individual')
     # plot title
 
-    title = f"Розподіл здоров'я. Функція здоров'я {health_func}, розмір популяції {population_size}, \n Ітерація {iter_num}. {final_text}"
+    title = f"Розподіл здоров'я. Функція здоров'я {health_func}, n = {population_size}, \n Ітерація {iter_num}. {final_text}"
     plt.title(title)
 
     plt.savefig(f"{dir_name}/Розподіл здоров'я, Ітерація {iter_num}, {final_text}.png")
@@ -126,7 +133,7 @@ def grey_genotype_phenotype_diagrams(population, conf, a, b, optimal_x, director
     plt.ylabel('Num of individual')
     # plot title
 
-    title = f"Значення X. Функція здоров'я {health_func}, розмір популяції {population_size}, \n Ітерація {iter_num}. {final_text}"
+    title = f"Значення X. Функція здоров'я {health_func}, n = {population_size}, \n Ітерація {iter_num}. {final_text}"
     plt.title(title)
 
     plt.savefig(f"{dir_name}/Значення X, Ітерація {iter_num}, {final_text}.png")

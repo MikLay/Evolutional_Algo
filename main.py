@@ -2,7 +2,8 @@ import statistics
 from datetime import datetime
 
 from draw_diagrams import default_genotype_phenotype_diagrams, grey_genotype_phenotype_diagrams, \
-    grey_0_1023_genotype_phenotype_diagrams, grey_511_512_genotype_phenotype_diagrams
+    grey_0_1023_genotype_phenotype_diagrams, grey_511_512_genotype_phenotype_diagrams, \
+    default_genotype_phenotype_diagrams_q_150, default_genotype_phenotype_diagrams_q_10
 from evolution import Evolution
 from health_functions import fh, fhd_10, fhd_150, fconst, grey_x_2, grey_x, grey_x_4, grey_512_x_2, grey_512_x_4, \
     grey_512_x_2_get_x_by_y, grey_512_x_4_get_x_by_y, grey_x_get_x_by_y, grey_x_2_get_x_by_y, grey_x_4_get_x_by_y
@@ -80,38 +81,38 @@ def no_mutation_tests(file_name, directory_name):
 
     # health functions
     params = [
-        {"population_generator": FConstPopulationGenerator(sequences_len=100), "health_func": fconst,
-         "successful_round_condition": f_const_successful_condition,
-         "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams, "calc_noise": True},
-        {"population_generator": BinomialPopulationGenerator(sequences_len=100), "health_func": fh,
-         "successful_round_condition": fh_fhd_successful_condition,
-         "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams, },
+        # {"population_generator": FConstPopulationGenerator(sequences_len=100), "health_func": fconst,
+        #  "successful_round_condition": f_const_successful_condition,
+        #  "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams, "calc_noise": True},
+        # {"population_generator": BinomialPopulationGenerator(sequences_len=100), "health_func": fh,
+        #  "successful_round_condition": fh_fhd_successful_condition,
+        #  "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams},
         {"population_generator": BinomialPopulationGenerator(sequences_len=100), "health_func": fhd_10,
          "successful_round_condition": fh_fhd_successful_condition,
-         "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams},
+         "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams_q_10},
         {"population_generator": BinomialPopulationGenerator(sequences_len=100), "health_func": fhd_150,
          "successful_round_condition": fh_fhd_successful_condition,
-         "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams},
-        {"population_generator": DecPopulationGenerator(sequences_len=10, get_x_by_y=grey_x_2_get_x_by_y,
-                                                        x1=0, x2=10.23, y1=0, y2=(10.23**2), perfect_x=10.23),
-         "health_func": grey_x_2, "successful_round_condition": grey_x_2_successful_condition,
-         "genotype_phenotype_diagrams": grey_0_1023_genotype_phenotype_diagrams},
-        {"population_generator": DecPopulationGenerator(sequences_len=10, get_x_by_y=grey_x_get_x_by_y,
-                                                        x1=0, x2=10.23, y1=0, y2=10.23, perfect_x=10.23),
-         "health_func": grey_x, "successful_round_condition": grey_x_successful_condition,
-         "genotype_phenotype_diagrams": grey_0_1023_genotype_phenotype_diagrams},
-        {"population_generator": DecPopulationGenerator(sequences_len=10, get_x_by_y=grey_x_4_get_x_by_y,
-                                                        x1=0, x2=10.23, y1=0, y2=(10.23**4), perfect_x=10.23),
-         "health_func": grey_x_4, "successful_round_condition": grey_x_4_successful_condition,
-         "genotype_phenotype_diagrams": grey_0_1023_genotype_phenotype_diagrams},
-        {"population_generator": DecPopulationGenerator(sequences_len=10, get_x_by_y=grey_512_x_2_get_x_by_y,
-                                                        x1=-5.11, x2=5.12, y1=0, y2=(5.12**2), perfect_x=0),
-         "health_func": grey_512_x_2, "successful_round_condition": grey_512_x_2_successful_condition,
-         "genotype_phenotype_diagrams": grey_511_512_genotype_phenotype_diagrams},
-        {"population_generator":  DecPopulationGenerator(sequences_len=10, get_x_by_y=grey_512_x_4_get_x_by_y,
-                                                        x1=-5.11, x2=5.12, y1=0, y2=(5.12**4), perfect_x=0),
-         "health_func": grey_512_x_4, "successful_round_condition": grey_512_x_4_successful_condition,
-         "genotype_phenotype_diagrams": grey_511_512_genotype_phenotype_diagrams},
+         "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams_q_150},
+        # {"population_generator": DecPopulationGenerator(sequences_len=10, get_x_by_y=grey_x_2_get_x_by_y,
+        #                                                 x1=0, x2=10.23, y1=0, y2=(10.23**2), perfect_x=10.23),
+        #  "health_func": grey_x_2, "successful_round_condition": grey_x_2_successful_condition,
+        #  "genotype_phenotype_diagrams": grey_0_1023_genotype_phenotype_diagrams},
+        # {"population_generator": DecPopulationGenerator(sequences_len=10, get_x_by_y=grey_x_get_x_by_y,
+        #                                                 x1=0, x2=10.23, y1=0, y2=10.23, perfect_x=10.23),
+        #  "health_func": grey_x, "successful_round_condition": grey_x_successful_condition,
+        #  "genotype_phenotype_diagrams": grey_0_1023_genotype_phenotype_diagrams},
+        # {"population_generator": DecPopulationGenerator(sequences_len=10, get_x_by_y=grey_x_4_get_x_by_y,
+        #                                                 x1=0, x2=10.23, y1=0, y2=(10.23**4), perfect_x=10.23),
+        #  "health_func": grey_x_4, "successful_round_condition": grey_x_4_successful_condition,
+        #  "genotype_phenotype_diagrams": grey_0_1023_genotype_phenotype_diagrams},
+        # {"population_generator": DecPopulationGenerator(sequences_len=10, get_x_by_y=grey_512_x_2_get_x_by_y,
+        #                                                 x1=-5.11, x2=5.12, y1=0, y2=(5.12**2), perfect_x=0),
+        #  "health_func": grey_512_x_2, "successful_round_condition": grey_512_x_2_successful_condition,
+        #  "genotype_phenotype_diagrams": grey_511_512_genotype_phenotype_diagrams},
+        # {"population_generator":  DecPopulationGenerator(sequences_len=10, get_x_by_y=grey_512_x_4_get_x_by_y,
+        #                                                 x1=-5.11, x2=5.12, y1=0, y2=(5.12**4), perfect_x=0),
+        #  "health_func": grey_512_x_4, "successful_round_condition": grey_512_x_4_successful_condition,
+        #  "genotype_phenotype_diagrams": grey_511_512_genotype_phenotype_diagrams},
     ]
 
     selection_classes = [
@@ -204,8 +205,8 @@ def tournament_mutation_tests(file_name, directory_name):
 
 
 def main():
-    file_name = "final_res.csv"
-    directory_name = "FINAL_RES"
+    file_name = "test_final_res.csv"
+    directory_name = "test_FINAL_RES"
     no_mutation_tests(file_name, directory_name)
     # ranking_mutation_tests(file_name, directory_name)
     # tournament_mutation_tests(file_name, directory_name)
