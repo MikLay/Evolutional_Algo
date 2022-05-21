@@ -6,9 +6,10 @@ from draw_diagrams import draw_round_res
 
 
 class ReportCreator:
-    def __init__(self, file_name, conf, calc_noise):
+    def __init__(self, file_name, directory_name, conf, calc_noise):
         self.all_population_statistics = {}
         self.file_name = file_name
+        self.directory_name = directory_name
         self.conf = conf
         self.health_func = self.conf["health_func"].__name__
         self.population_size = self.conf["population_size"]
@@ -25,16 +26,16 @@ class ReportCreator:
         else:
             self.all_population_statistics[population_id] = [statistics_to_save.copy()]
 
-    def save_diagrams(self, conf, round_data):
-        draw_round_res(conf, round_data["diagram_avg_health"], "Середнє значення здоров’я популяції")
-        draw_round_res(conf, round_data["diagram_intensity"], "Інтенсивність відбору")
-        draw_round_res(conf, round_data["diagram_diff"], "Різниця відбору")
-        draw_round_res(conf, round_data["diagram_sigma"], "Стандартне відхилення коефіцієнта")
-        draw_round_res(conf, round_data["diagram_intensity"], "Інтенсивність відбору", round_data["diagram_diff"], "Різниця відбору")
-        draw_round_res(conf, round_data["diagram_best_percent"], "Частка копій найкращої особини")
-        draw_round_res(conf, round_data["diagram_grow_speed"], "Швидкість росту")
+    def save_diagrams(self, conf, round_data, directory_name):
+        draw_round_res(conf, round_data["diagram_avg_health"], "Середнє значення здоров’я популяції", directory_name=directory_name)
+        draw_round_res(conf, round_data["diagram_intensity"], "Інтенсивність відбору", directory_name=directory_name)
+        draw_round_res(conf, round_data["diagram_diff"], "Різниця відбору", directory_name=directory_name)
+        draw_round_res(conf, round_data["diagram_sigma"], "Стандартне відхилення коефіцієнта", directory_name=directory_name)
+        draw_round_res(conf, round_data["diagram_intensity"], "Інтенсивність відбору", round_data["diagram_diff"], "Різниця відбору", directory_name=directory_name)
+        draw_round_res(conf, round_data["diagram_best_percent"], "Частка копій найкращої особини", directory_name=directory_name)
+        draw_round_res(conf, round_data["diagram_grow_speed"], "Швидкість росту", directory_name=directory_name)
         draw_round_res(conf, round_data["diagram_repr_speed"], "Швидкість репродукції", round_data["diagram_teta_speed"],
-                       "Втрата різноманітності")
+                       "Втрата різноманітності", directory_name=directory_name)
 
     def draw_table(self, round_headers, total_headers):
         # rounds' results
@@ -69,7 +70,7 @@ class ReportCreator:
                         conf = self.conf
                         conf["method"] = key
                         conf["progin"] = i
-                        self.save_diagrams(conf, round_data)
+                        self.save_diagrams(conf, round_data, self.directory_name)
 
                     for col in round_headers:
                         row.append(round_data.get(col, ""))
@@ -133,7 +134,7 @@ class ReportCreator:
 
         successful_rounds = list(filter(is_round_success, data))
 
-        res["Suc"] = len(successful_rounds)
+        res["Suc"] = f"{round(len(successful_rounds) * 100 / len(data), 2)} % ({len(successful_rounds)}/{len(data)})"
 
         if len(successful_rounds) > 0:
             res["Min"] = min([i["NI"] for i in successful_rounds])

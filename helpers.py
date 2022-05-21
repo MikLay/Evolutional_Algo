@@ -12,14 +12,18 @@ def grey_to_dec(seq, a, b):
     m = len(seq)
     return a + n * (b - a)/(2 ** m - 1)
 
+
 def binary_to_gray(n):
     n ^= (n >> 1)
-
     # bin(n) returns n's binary representation with a '0b' prefixed
     # the slice operation is to remove the prefix
     return bin(n)[2:]
 
-def dec_to_grey(x, a, b):
+
+def dec_to_grey(x, a, b, l=10):
     m = 10
     n = int((x - a) * (2 ** m - 1) / (b - a))
-    return binary_to_gray(n)
+    res = binary_to_gray(n)
+    diff = l - len(res)
+    # it should be always be same length
+    return diff * '0' + res

@@ -105,3 +105,27 @@ def grey_e_x_1(seq):
 
 def grey_e_x_2(seq):
     return grey_e_x_c(seq, 2)
+
+# ---------------------------
+
+
+def grey_x_2_get_x_by_y(y):
+    return [y ** 0.5]
+
+
+def grey_x_get_x_by_y(y):
+    return [y]
+
+
+def grey_x_4_get_x_by_y(y):
+    return [y ** 0.25]
+
+
+def grey_512_x_2_get_x_by_y(y):
+    r = round((5.12 ** 2 - y) ** 0.5, 2)
+    return [-r, r]
+
+
+def grey_512_x_4_get_x_by_y(y):
+    r = round((5.12 ** 4 - y) ** 0.25, 2)
+    return [-r, r]
