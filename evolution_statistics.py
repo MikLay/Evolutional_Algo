@@ -40,10 +40,19 @@ class EvolutionStatistic:
 
     def selected_items(self, old_population_with_health, new_population_with_health):
         res = []
-        new_p = [i[0] for i in new_population_with_health]
+        new_p = {}
+        for i in new_population_with_health:
+            if i[0] in new_p:
+                new_p[i[0]] += 1
+            else:
+                new_p[i[0]] = 1
         for old_item in old_population_with_health:
             if old_item[0] in new_p:
                 res.append(old_item)
+                if new_p[old_item[0]] > 1:
+                    new_p[old_item[0]] -= 1
+                else:
+                    new_p.pop(old_item[0])
         return res
 
     def calc_rr(self, old_population_with_health, selected_items_with_health):

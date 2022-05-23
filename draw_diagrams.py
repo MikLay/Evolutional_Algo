@@ -45,9 +45,10 @@ def default_genotype_phenotype_diagrams(population, conf, directory_name, q=1):
 
     # phenotype
     bins = 100
+    hist_range = (0, optimal_health)
 
     plt.figure()
-    plt.hist(health, bins, color='green',
+    plt.hist(health, bins, hist_range, color='green',
              histtype='bar', rwidth=1)
 
     # x-axis label
@@ -64,7 +65,7 @@ def default_genotype_phenotype_diagrams(population, conf, directory_name, q=1):
 
     # genotype
     plt.figure()
-    plt.hist(distance_to_optimal, bins, color='red',
+    plt.hist(distance_to_optimal, bins, hist_range, color='red',
              histtype='bar', rwidth=1)
 
     # x-axis label

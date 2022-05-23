@@ -1,4 +1,5 @@
 import statistics
+from datetime import datetime
 
 from evolution_statistics import EvolutionStatistic
 from mutation import mutation
@@ -53,6 +54,9 @@ class Evolution:
     def run_evolution(self):
 
         while not self.should_stop_evolution():
+            if self.current_iter_num % 1000 == 0:
+                print(f"{self.current_iter_num} {datetime.now().time()}")
+
             if self.current_iter_num < 5:
                 self.draw_genotype_phenotype_diagrams(self.population_with_health, {"health_func": self.health_function,
                                                              "population_size": self.n, "mutation": self.mutation_p,
@@ -67,6 +71,9 @@ class Evolution:
             else:
                 self.population_with_health = parents_pool_with_health
             self.current_iter_num += 1
+
+            if len(self.average_health) > 9:
+                self.average_health.pop(0)
             self.average_health.append(self.calc_average_health_in_population())
 
             self.statistics_class.update(self.population_with_health, self.current_iter_num)

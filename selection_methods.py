@@ -73,23 +73,19 @@ class LinearRankingSelection(Selection):
         self.name = f"linear_ranking_selection_b_{b}"
         self.b = b
 
-    def calc_ranking(self, population):
-        sorted_population = sorted(population, key=lambda tup: tup[1])
-        population_with_ranking = [(sorted_population[i][0], sorted_population[i][1], i) for i in range(len(sorted_population))]
-        return population_with_ranking[::-1]
-
     def p_linear_rank(self, value, N):
         return (2-self.b)/N + (2 * value * (self.b-1))/(N*(N-1))
 
     def calc_p(self, population):
-        ranking_population = self.calc_ranking(population)
-        N = len(ranking_population)
+        N = len(population)
+        sorted_population = sorted(population, key=lambda tup: tup[1], reverse=True)
         res = []
         prev_val = 0
-        for i in ranking_population:
-            p = self.p_linear_rank(i[2], N)
+        for i in range(N):
+            rang = N - i - 1
+            p = self.p_linear_rank(rang, N)
             new_val = prev_val + p
-            res.append((i[0], i[1], (prev_val, new_val)))
+            res.append((sorted_population[i][0], sorted_population[i][1], (prev_val, new_val)))
             prev_val = new_val
         return res
 

@@ -49,9 +49,6 @@ def grey_successful_condition(population_with_health, optimal_x, optimal_y, a, b
         y = population_with_health[0][1]
         return ((optimal_x - q) <= x <= (optimal_x + q)) and ((optimal_y - p) <= y <= (optimal_y + p))
 
-    xs = [grey_to_dec(i[0], a, b) for i in population_with_health]
-    xy = [i[1] for i in population_with_health]
-    w = [(grey_to_dec(i[0], a, b), i[1]) for i in population_with_health]
     for i in population_with_health:
         x = grey_to_dec(i[0], a, b)
         y = i[1]
