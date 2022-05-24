@@ -3,7 +3,7 @@ import statistics
 
 import numpy
 
-from successful_round_condition import all_are_the_same
+from successful_round_conditions import all_are_the_same
 
 
 class EvolutionStatistic:

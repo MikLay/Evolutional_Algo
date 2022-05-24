@@ -13,7 +13,7 @@ from init_sequences import BinomialPopulationGenerator, FConstPopulationGenerato
 # Турнірний стохастичний без повернення, t=2; p=0.6, p=0.8
 # Турнірний стохастичний з поверненням, t=2; p=0.6, p=0.8
 # За рангом лінійний, β=1.6, β=1.2
-from successful_round_condition import f_const_successful_condition, fh_fhd_successful_condition, \
+from successful_round_conditions import f_const_successful_condition, fh_fhd_successful_condition, \
     grey_512_x_4_successful_condition, grey_512_x_2_successful_condition, grey_x_4_successful_condition, \
     grey_x_successful_condition, grey_x_2_successful_condition
 from report_creator import ReportCreator
@@ -229,11 +229,12 @@ def tournament_mutation_tests(file_name, directory_name):
 
 
 def main():
-    file_name = "final_res.csv"
-    directory_name = "FINAL_RES"
-    no_mutation_tests(file_name, directory_name)
-    ranking_mutation_tests(file_name, directory_name)
-    tournament_mutation_tests(file_name, directory_name)
+    file_name = "x_final_res.csv"
+    directory_name = "x_FINAL_RES"
+    print("hello")
+    # no_mutation_tests(file_name, directory_name)
+    # ranking_mutation_tests(file_name, directory_name)
+    # tournament_mutation_tests(file_name, directory_name)
 
 
 if __name__ == '__main__':

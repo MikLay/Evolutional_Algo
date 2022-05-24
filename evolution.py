@@ -1,8 +1,8 @@
+import random
 import statistics
 from datetime import datetime
 
 from evolution_statistics import EvolutionStatistic
-from mutation import mutation
 from selection_methods import Selection
 
 
@@ -51,6 +51,19 @@ class Evolution:
             return self.current_iter_num >= self.max_iter_num or self.almost_equal()
         return self.current_iter_num >= self.max_iter_num or self.all_sequences_are_equal()
 
+    def mutation(population, p):
+        res = []
+        for item in population:
+            list_item = list(item)
+            for i in range(len(list_item)):
+                if random.random() < p:
+                    if list_item[i] == '0':
+                        list_item[i] = '1'
+                    else:
+                        list_item[i] = '0'
+            res.append(''.join(list_item))
+        return res
+
     def run_evolution(self):
 
         while not self.should_stop_evolution():
@@ -66,7 +79,7 @@ class Evolution:
             parents_pool_with_health = self.selection_method.select_parents_pool(self.population_with_health)
             if self.mutation_p > 0:
                 parents_pool = [i[0] for i in parents_pool_with_health]
-                parents_pool_after_mutation = mutation(parents_pool, self.mutation_p)
+                parents_pool_after_mutation = self.mutation(parents_pool, self.mutation_p)
                 self.population_with_health = [(i, self.health_function(i)) for i in parents_pool_after_mutation]
             else:
                 self.population_with_health = parents_pool_with_health
