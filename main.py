@@ -229,12 +229,11 @@ def tournament_mutation_tests(file_name, directory_name):
 
 
 def main():
-    file_name = "x_final_res.csv"
-    directory_name = "x_FINAL_RES"
-    print("hello")
-    # no_mutation_tests(file_name, directory_name)
-    # ranking_mutation_tests(file_name, directory_name)
-    # tournament_mutation_tests(file_name, directory_name)
+    file_name = "results.csv"
+    directory_name = "RESULTS"
+    no_mutation_tests(file_name, directory_name)
+    ranking_mutation_tests(file_name, directory_name)
+    tournament_mutation_tests(file_name, directory_name)
 
 
 if __name__ == '__main__':
