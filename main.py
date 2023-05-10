@@ -90,60 +90,60 @@ def mutation_tests(file_name, directory_name, population_size=100, iterations=10
 
     # health functions
     params = [
-        # # FConstAll
-        # {"populations": fconst_populations.copy(),
-        #  "health_func": fconst,
-        #  "successful_round_condition": f_const_successful_condition,
-        #  "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams,
-        #  "calc_noise": True
-        #  },
-        # # FHD q=100 without mutations
-        # {"populations": fhd_100_populations.copy(),
-        #  "health_func": fhd_100,
-        #  "successful_round_condition": fh_fhd_successful_condition,
-        #  "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams_q_100
-        #  },
-        # # FHD q=100 with mutations
-        # {"populations": fhd_100_populations.copy(),
-        #  "health_func": fhd_100,
-        #  "successful_round_condition": fh_fhd_successful_condition,
-        #  "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams_q_100,
-        #  "mutation": True,
-        #  "mutation_p": mutation_100
-        #  },
-        # # FHD q=100 crossover
-        # {"populations": fhd_100_populations.copy(),
-        #  "health_func": fhd_100,
-        #  "successful_round_condition": fh_fhd_successful_condition,
-        #  "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams_q_100,
-        #  "mutation": False,
-        #  "crossover": True,
-        #  "mutation_p": 0
-        #  },
-        # # FHD q=100 M+C
-        # {"populations": fhd_100_populations.copy(),
-        #  "health_func": fhd_100,
-        #  "successful_round_condition": fh_fhd_successful_condition,
-        #  "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams_q_100,
-        #  "mutation": True,
-        #  "crossover": True,
-        #  "mutation_p": mutation_100
-        #  },
-        # # f(x)  степенева:
-        # # y=x^2, 0≤x≤10.23 . Глобальний максимум:  y=〖(10.23)〗^2,  x=10.23.
-        # {"populations": grey_x_2_populations.copy(),
-        #  "health_func": grey_x_2,
-        #  "successful_round_condition": grey_x_2_successful_condition,
-        #  "genotype_phenotype_diagrams": grey_0_1023_genotype_phenotype_diagrams
-        #  },
-        # # Mutation
-        # {"populations": grey_x_2_populations.copy(),
-        #  "health_func": grey_x_2,
-        #  "successful_round_condition": grey_x_2_successful_condition,
-        #  "genotype_phenotype_diagrams": grey_0_1023_genotype_phenotype_diagrams,
-        #  "mutation": True,
-        #  "mutation_p": mutation_10
-        #  },
+        # FConstAll
+        {"populations": fconst_populations.copy(),
+         "health_func": fconst,
+         "successful_round_condition": f_const_successful_condition,
+         "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams,
+         "calc_noise": True
+         },
+        # FHD q=100 without mutations
+        {"populations": fhd_100_populations.copy(),
+         "health_func": fhd_100,
+         "successful_round_condition": fh_fhd_successful_condition,
+         "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams_q_100
+         },
+        # FHD q=100 with mutations
+        {"populations": fhd_100_populations.copy(),
+         "health_func": fhd_100,
+         "successful_round_condition": fh_fhd_successful_condition,
+         "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams_q_100,
+         "mutation": True,
+         "mutation_p": mutation_100
+         },
+        # FHD q=100 crossover
+        {"populations": fhd_100_populations.copy(),
+         "health_func": fhd_100,
+         "successful_round_condition": fh_fhd_successful_condition,
+         "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams_q_100,
+         "mutation": False,
+         "crossover": True,
+         "mutation_p": 0
+         },
+        # FHD q=100 M+C
+        {"populations": fhd_100_populations.copy(),
+         "health_func": fhd_100,
+         "successful_round_condition": fh_fhd_successful_condition,
+         "genotype_phenotype_diagrams": default_genotype_phenotype_diagrams_q_100,
+         "mutation": True,
+         "crossover": True,
+         "mutation_p": mutation_100
+         },
+        # f(x)  степенева:
+        # y=x^2, 0≤x≤10.23 . Глобальний максимум:  y=〖(10.23)〗^2,  x=10.23.
+        {"populations": grey_x_2_populations.copy(),
+         "health_func": grey_x_2,
+         "successful_round_condition": grey_x_2_successful_condition,
+         "genotype_phenotype_diagrams": grey_0_1023_genotype_phenotype_diagrams
+         },
+        # Mutation
+        {"populations": grey_x_2_populations.copy(),
+         "health_func": grey_x_2,
+         "successful_round_condition": grey_x_2_successful_condition,
+         "genotype_phenotype_diagrams": grey_0_1023_genotype_phenotype_diagrams,
+         "mutation": True,
+         "mutation_p": mutation_10
+         },
         # Crossover
         {"populations": grey_x_2_populations.copy(),
          "health_func": grey_x_2,
@@ -217,10 +217,10 @@ def main():
     file_name = "results.csv"
     directory_name = "RESULTS"
     mutation_tests(file_name, directory_name, population_size=100, iterations=100)
-    mutation_tests(file_name, directory_name, population_size=200, iterations=100)
-    mutation_tests(file_name, directory_name, population_size=300, iterations=100)
-    mutation_tests(file_name, directory_name, population_size=400, iterations=100)
-    mutation_tests(file_name, directory_name, population_size=500, iterations=100)
+    # mutation_tests(file_name, directory_name, population_size=200, iterations=100)
+    # mutation_tests(file_name, directory_name, population_size=300, iterations=100)
+    # mutation_tests(file_name, directory_name, population_size=400, iterations=100)
+    # mutation_tests(file_name, directory_name, population_size=500, iterations=100)
 
 
 if __name__ == '__main__':
