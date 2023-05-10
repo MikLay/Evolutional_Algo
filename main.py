@@ -1,4 +1,5 @@
 import statistics
+import sys
 from datetime import datetime
 from collections import Counter
 
@@ -73,7 +74,9 @@ def run_evolution_for_config(conf, selection_classes, file_name, directory_name)
     report_creator.create_csv()
 
 def mutation_tests(file_name, directory_name, population_size=100, iterations=100):
-
+    print('----------------------------------------------------------------------------------------------------')
+    print(f'---- Experiment started.  population_size={population_size}, iterations={100}, encoding=Grey ----')
+    print('----------------------------------------------------------------------------------------------------')
     fconst_generator = FConstPopulationGenerator(sequences_len=100)
     binominal_fhd_100 = BinomialPopulationGenerator(sequences_len=100, x1=0, x2=1, perfect_x=0)
     binominal_grey_x_2 = BinomialPopulationGenerator(sequences_len=10, x1=0, x2=10.23, perfect_x=10.23)
@@ -214,6 +217,8 @@ def mutation_tests(file_name, directory_name, population_size=100, iterations=10
         run_evolution_for_config(param_set, selection_classes, file_name, directory_name)
 
 def main():
+    file = open('output.txt', 'a')
+    sys.stdout = file
     file_name = "results.csv"
     directory_name = "RESULTS"
     mutation_tests(file_name, directory_name, population_size=100, iterations=100)
@@ -221,6 +226,7 @@ def main():
     # mutation_tests(file_name, directory_name, population_size=300, iterations=100)
     # mutation_tests(file_name, directory_name, population_size=400, iterations=100)
     # mutation_tests(file_name, directory_name, population_size=500, iterations=100)
+    file.close()
 
 
 if __name__ == '__main__':
