@@ -8,10 +8,11 @@ from helpers import grey_to_dec
 def get_dir_name(conf, directory_name):
     health_func = conf["health_func"].__name__
     population_size = conf["population_size"]
-    mutation = conf.get("mutation", 0)
+    mutation = conf.get("mutation", False)
+    crossover = conf.get("crossover", False)
     selection_method = conf["method"].name
     progin = conf["progin"] + 1
-    mut_status = "with_mutation" if mutation > 0 else "without_mutation"
+    mut_status = "mutation_and_crossover" if mutation and crossover else "with_mutation" if mutation else "crossover" if crossover else "without_mutation"
 
     dir_name = f'{directory_name}/{mut_status}/{health_func}/{population_size}/{selection_method}/{progin}'
 
@@ -27,6 +28,10 @@ def default_genotype_phenotype_diagrams_q_10(population, conf, directory_name):
 
 def default_genotype_phenotype_diagrams_q_150(population, conf, directory_name):
     default_genotype_phenotype_diagrams(population, conf, directory_name, 150)
+
+
+def default_genotype_phenotype_diagrams_q_100(population, conf, directory_name):
+    default_genotype_phenotype_diagrams(population, conf, directory_name, 100)
 
 
 def default_genotype_phenotype_diagrams(population, conf, directory_name, q=1):
@@ -144,11 +149,13 @@ def grey_genotype_phenotype_diagrams(population, conf, a, b, optimal_x, director
 def draw_round_res(params, data_1, line_legend, data_2=None, line_legend_2="", directory_name="RESULT"):
     health_func = params["health_func"].__name__
     population_size = params["population_size"]
-    mutation = params.get("mutation", 0)
+    mutation = params.get("mutation", False)
+    mutation_p = params.get("mutation_p", 0)
+    crossover = params.get("crossover", False)
     selection_method = params["method"]
     progin = params["progin"] + 1
 
-    title = f"Ф. здоров'я: {health_func},  Відбір: {selection_method}, \n Популяція: {population_size}, Прогін {progin}, P_мутації: {mutation}"
+    title = f"Ф. здоров'я: {health_func},  Відбір: {selection_method}, \n Популяція: {population_size}, Прогін {progin}, P_мутації: {mutation_p}, Crossover: {crossover}"
 
     x = [i for i in range(len(data_1))]
     plt.figure()
@@ -168,7 +175,8 @@ def draw_round_res(params, data_1, line_legend, data_2=None, line_legend_2="", d
     plt.legend()
 
     # function to show the plot
-    mut_status = "with_mutation" if mutation > 0 else "without_mutation"
+    mut_status = "mutation_and_crossover" if mutation and crossover else "with_mutation" if mutation else "crossover" if crossover else "without_mutation"
+
     file_title = line_legend
     if line_legend_2:
         file_title += f" + {line_legend_2}"

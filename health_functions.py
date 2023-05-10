@@ -1,5 +1,4 @@
-from math import exp
-
+from math import exp, log
 from helpers import grey_to_dec
 
 
@@ -31,7 +30,7 @@ def fhd(seq, q=10):
     """
     l = len(seq)
     k = len(list(filter(lambda i: i == '0', seq)))
-    return (l-k) + k * q
+    return (l - k) + k * q
 
 
 def fhd_10(seq):
@@ -40,6 +39,10 @@ def fhd_10(seq):
 
 def fhd_50(seq):
     return fhd(seq, 50)
+
+
+def fhd_100(seq):
+    return fhd(seq, 100)
 
 
 def fhd_150(seq):
@@ -106,6 +109,7 @@ def grey_e_x_1(seq):
 def grey_e_x_2(seq):
     return grey_e_x_c(seq, 2)
 
+
 # ---------------------------
 
 
@@ -129,3 +133,7 @@ def grey_512_x_2_get_x_by_y(y):
 def grey_512_x_4_get_x_by_y(y):
     r = round((5.12 ** 4 - y) ** 0.25, 2)
     return [-r, r]
+
+
+def grey_e_x_c_get_x_by_y(y, c):
+    return [log(y) / c]

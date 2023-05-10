@@ -13,7 +13,8 @@ class ReportCreator:
         self.conf = conf
         self.health_func = self.conf["health_func"].__name__
         self.population_size = self.conf["population_size"]
-        self.mutation = self.conf.get("mutation", 0)
+        self.mutation_p = self.conf.get("mutation_p", 0)
+        self.crossover = self.conf.get("crossover", False)
         self.calc_noise = calc_noise
         self.show_diagram = not calc_noise
 
@@ -57,7 +58,7 @@ class ReportCreator:
         with open(self.file_name, 'a', newline='') as file:
             writer = csv.writer(file)
 
-            title = f"Функція здоров'я: {self.health_func}, n: {self.population_size}, P мутації: {self.mutation}"
+            title = f"Функція здоров'я: {self.health_func}, n: {self.population_size}, P мутації: {self.mutation_p}, Crossover: {self.crossover}"
             writer.writerow([title])
             writer.writerow(round_num)
             writer.writerow(headers)

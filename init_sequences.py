@@ -29,17 +29,19 @@ class FConstPopulationGenerator(PopulationGenerator):
 
 
 class BinomialPopulationGenerator(PopulationGenerator):
-    def generate_optimal_sequence(self):
-        return '0' * self.sequences_len
+    def __init__(self, sequences_len, x1, x2, perfect_x):
+        self.x1 = x1
+        self.x2 = x2
+        self.perfect_x = perfect_x
+        perfect_item = dec_to_grey(self.perfect_x, self.x1, self.x2, l=sequences_len)
+        super().__init__(sequences_len, perfect_item)
 
-    def generate_default_sequence(self):
-        seq = ''
-        for _ in range(self.sequences_len):
-            if random.random() < 0.5:
-                seq += '0'
-            else:
-                seq += '1'
-        return seq
+    def generate_optimal_sequence(self):
+        return dec_to_grey(self.perfect_x, self.x1, self.x2, self.sequences_len)
+
+    def generate_default_sequence(self, probability = 0.5):
+        """Generate a sequence of random binary digits ('0' or '1') of the given length with a given probability of each digit."""
+        return ''.join('1' if random.random() < probability else '0' for _ in range(self.sequences_len))
 
     def generate_population(self, population_size, add_perfect=True):
         res = []

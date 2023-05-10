@@ -25,8 +25,7 @@ class EvolutionStatistic:
         self._sigma_arr = [self.calc_sigma(start_population_with_health)]
         self._diagram_avg_health = []
 
-    def update(self, population_with_health, current_iter_num):
-        selected_items = self.selected_items(self._current_population, population_with_health)
+    def update(self, population_with_health, current_iter_num, selected_items):
         self._repr_speed.append((self.calc_rr(self._current_population, selected_items), self._current_iter))
         self._selection_diffs.append((self.calc_selection_diff(self._current_population, selected_items), self._current_iter))
         self._current_population = population_with_health.copy()
@@ -94,7 +93,10 @@ class EvolutionStatistic:
 
     def calc_selection_intensity_arr(self):
         def calc_selection_intensity(fs, f, sigma):
-            return (fs - f) / sigma
+            if sigma <= 0:
+                return 1
+            else:
+                return (fs - f) / sigma
 
         selection_intensity_arr = []
         for i in range(1, len(self._avarage_health_arr)):
@@ -151,7 +153,7 @@ class EvolutionStatistic:
         current_population_statistics["GR_avg"] = statistics.mean([i[0] for i in growth_rate])
         more_than_50_percent = list(filter(lambda x: x[2] >= 0.5, growth_rate))
         current_population_statistics["GR_late"] = more_than_50_percent[0][0] if more_than_50_percent else "-"
-        current_population_statistics["NI_GR_late"] = more_than_50_percent[0][1]
+        current_population_statistics["NI_GR_late"] = more_than_50_percent[0][1] if more_than_50_percent else "-"
 
         # diversity
         min_rr = sorted(self._repr_speed, key=lambda i: i[0])[0]

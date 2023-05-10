@@ -2,12 +2,7 @@ import random
 
 
 def choose_candidates(population, t):
-    indexes = []
-    while len(indexes) != t:
-        new_index = max(round(random.random() * len(population)-1), 0)
-        if new_index not in indexes:
-            indexes.append(new_index)
-    return [population[i] for i in indexes]
+    return random.sample(population, t)
 
 
 class Selection:
@@ -26,14 +21,10 @@ class TournamentWithReturnSelection(Selection):
         t (number of candidates) == 2
         """
         n = len(population_with_health)
-        new_population = []
-        while len(new_population) != n:
-            candidates = choose_candidates(population_with_health, 2)
-            if random.random() <= self.p:
-                rate = sorted(candidates, key=lambda tup: tup[1], reverse=True)
-            else:
-                rate = sorted(candidates, key=lambda tup: tup[1])
-            new_population.append(rate[0])
+        new_population = [max(choose_candidates(population_with_health, 2), key=lambda tup: tup[1])
+                          if random.random() <= self.p
+                          else min(choose_candidates(population_with_health, 2), key=lambda tup: tup[1])
+                          for _ in range(n)]
         return new_population
 
 
@@ -48,21 +39,19 @@ class TournamentWithoutReturnSelection(Selection):
         t (number of candidates) == 2
         """
         # as t == 2, make 2 copy of population
-        second_copy = population_with_health.copy()
-        current_population = population_with_health
-        n = len(population_with_health)
+        current_population = population_with_health.copy()
         new_population = []
-        while len(new_population) != n:
-            # todo fix for odd number
-            if len(current_population) < 2:
-                current_population = second_copy
+        while len(new_population) != len(population_with_health) and len(current_population) != 0:
+            if len(current_population) == 1:
+                new_population.append(current_population.pop())
+                continue
             candidates = choose_candidates(current_population, 2)
-            for c in candidates:
-                current_population.remove(c)
             if random.random() <= self.p:
                 rate = sorted(candidates, key=lambda tup: tup[1], reverse=True)
             else:
                 rate = sorted(candidates, key=lambda tup: tup[1])
+
+            current_population.remove(rate[1])
             new_population.append(rate[0])
 
         return new_population

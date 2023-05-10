@@ -40,6 +40,7 @@ def grey_512_x_4_successful_condition(population_with_health):
     return grey_successful_condition(population_with_health, 0, 5.12 ** 4, -5.11, 5.12)
 
 
+
 def grey_successful_condition(population_with_health, optimal_x, optimal_y, a, b):
     q = 0.01
     p = 0.01
